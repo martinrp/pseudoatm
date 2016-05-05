@@ -20279,26 +20279,22 @@
 	    }, {
 	        key: 'clearFromCash',
 	        value: function clearFromCash(e) {
-	            var target = this.state.pin;
-	            var leng = target.length;
-	            if (leng > 0) {
-	                this.clearErrorMsg();
-	                var newVal = target.substring(0, leng - 1);
-	                this.setState({ pin: newVal });
-	            }
+	            this.clearErrorMsg();
+	            newStr = this.removeLastElem(this.state.cashInput);
+	            this.setState({ cashInput: newVal });
 	        }
-
-	        // TODO: Refactor down into reusable function
-
 	    }, {
 	        key: 'clearFromPin',
 	        value: function clearFromPin(e) {
-	            var target = this.state.pin;
-	            var leng = target.length;
-	            if (leng > 0) {
-	                this.clearErrorMsg();
-	                var newVal = target.substring(0, leng - 1);
-	                this.setState({ pin: newVal });
+	            this.clearErrorMsg();
+	            newStr = this.removeLastElem(this.state.pin);
+	            this.setState({ pin: newVal });
+	        }
+	    }, {
+	        key: 'removeLastElem',
+	        value: function removeLastElem(str) {
+	            if (str.length > 0) {
+	                return str.substring(0, leng - 1);
 	            }
 	        }
 
