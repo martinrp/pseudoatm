@@ -40,7 +40,7 @@ class Keypad extends Component {
         keypad.dispatchEvent(enterEvent);
     }
     
-    // TODO: Replace this with a map/reduce function
+    // TODO: Replace this with a loop/map
     render() {
         return ( 
             <div id='keypad' className='keypad'>

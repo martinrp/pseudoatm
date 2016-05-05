@@ -37,6 +37,7 @@
     "babelify": "7.3.0",
     "chai": "^3.5.0",
     "css-loader": "0.23.1",
+    "css-loading": "1.4.0",
     "istanbul": "^0.4.2",
     "jshint": "^2.5.x",
     "less": "2.6.1",

@@ -54,13 +54,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _pin = __webpack_require__(168);
+	var _atm = __webpack_require__(168);
 
-	var _pin2 = _interopRequireDefault(_pin);
+	var _atm2 = _interopRequireDefault(_atm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_reactDom2.default.render(_react2.default.createElement(_pin2.default, null), document.getElementById('pin'));
+	_reactDom2.default.render(_react2.default.createElement(_atm2.default, null), document.getElementById('atm'));
 
 /***/ },
 /* 1 */
@@ -20166,13 +20166,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _keypad = __webpack_require__(169);
-
-	var _keypad2 = _interopRequireDefault(_keypad);
-
-	var _withdraw = __webpack_require__(174);
+	var _withdraw = __webpack_require__(169);
 
 	var _withdraw2 = _interopRequireDefault(_withdraw);
+
+	var _returncard = __webpack_require__(175);
+
+	var _returncard2 = _interopRequireDefault(_returncard);
+
+	var _pin = __webpack_require__(176);
+
+	var _pin2 = _interopRequireDefault(_pin);
+
+	__webpack_require__(179);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20182,243 +20188,194 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Pin = function (_Component) {
-	    _inherits(Pin, _Component);
+	// ATM Functionality:
+	// x Recieve number events
+	// x Clear event - remove last number from end of string
+	// x Cancel - clear string
+	// x Enter - Failure (Error message)
+	// x Obfuscate pin
+	// x Limit pin to 4 nums
+	// x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+	// x Only allow values in multiples of 10
 
-	    function Pin(props) {
-	        _classCallCheck(this, Pin);
+	var Atm = function (_Component) {
+	    _inherits(Atm, _Component);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Pin).call(this, props));
+	    function Atm(props) {
+	        _classCallCheck(this, Atm);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Atm).call(this, props));
 
 	        _this.state = {
-	            pin: '',
-	            errorMsg: '',
-	            canWithdraw: false,
-	            cashInput: '0'
+	            state: 'insert',
+	            cash: '0'
 	        };
 	        return _this;
 	    }
 
-	    // Functionality:
-	    // x Recieve number events
-	    // x Clear event - remove last number from end of string
-	    // x Cancel - clear string
-	    // x Enter - Failure (Error message)
-	    // x Obfuscate pin
-	    // x Limit pin to 4 nums
-	    // Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+	    // State handler - this is the primary index which handles the state of the SPA.
+	    // We do not need a router as users should not be able to traverse routes via the nav.
 
-	    // TODO:
-	    // Split out into two subcomponents with an instance of keypad each.
+	    // Info:
+	    // I have used simple event bubbling for components (data down, actions/events up).
+	    // For a project this simple I believe using Flux/Redux is not needed.
 
-	    _createClass(Pin, [{
+	    _createClass(Atm, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var keypad = document.getElementById('keypad');
-	            keypad.addEventListener('numPress', this.numEventHandler.bind(this));
-	            keypad.addEventListener('clearPress', this.clearEventHandler.bind(this));
-	            keypad.addEventListener('cancelPress', this.cancelEventHandler.bind(this));
-	            keypad.addEventListener('enterPress', this.enterEventHandler.bind(this));
+	            var atm = document.getElementById('atm-component');
+	            atm.addEventListener('pinCorrect', this.pinCorrectHandler.bind(this), true);
+	            atm.addEventListener('cashSubmit', this.cashSubmitHandler.bind(this), true);
+	            atm.addEventListener('returnCard', this.returnCardHandler.bind(this), true);
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            var keypad = document.getElementById('keypad');
-	            keypad.removeEventListener('numPress', this.numEventHandler);
-	            keypad.addEventListener('clearPress', this.clearEventHandler);
-	            keypad.addEventListener('cancelPress', this.cancelEventHandler);
-	            keypad.addEventListener('enterPress', this.enterEventHandler);
-	        }
-
-	        // Event Handlers
-
-	        // Add num
-
-	    }, {
-	        key: 'numEventHandler',
-	        value: function numEventHandler(e) {
-	            if (this.state.canWithdraw) {
-	                this.addToCash(e);
-	            } else {
-	                this.addToPin(e);
-	            }
+	            var atm = document.getElementById('atm-component');
+	            atm.removeEventListener('pinCorrect', this.pinCorrectHandler, true);
+	            atm.removeEventListener('cashSubmit', this.cashSubmitHandler, true);
+	            atm.removeEventListener('cashSubmit', this.returnCardHandler, true);
 	        }
 	    }, {
-	        key: 'addToPin',
-	        value: function addToPin(e) {
-	            if (this.state.pin.length < 4) {
-	                this.clearErrorMsg();
-	                var newPin = e.detail.number.toString();
-	                this.setState({ pin: this.state.pin.concat(newPin) });
-	            }
+	        key: 'pinCorrectHandler',
+	        value: function pinCorrectHandler(e) {
+	            this.setState({ state: 'withdraw' });
 	        }
 	    }, {
-	        key: 'addToCash',
-	        value: function addToCash(e) {
-	            this.clearErrorMsg();
-	            var val = this.state.cashInput;
-	            var newVal = e.detail.number.toString();
+	        key: 'insertCardHandler',
+	        value: function insertCardHandler(e) {
+	            this.setState({ state: 'pin' });
+	        }
+	    }, {
+	        key: 'cashSubmitHandler',
+	        value: function cashSubmitHandler(e) {
+	            var _this2 = this;
 
-	            if (val === '0') {
-	                val = '';
-	            }
-	            this.setState({ cashInput: val.concat(newVal) });
-	        }
-
-	        // Clear
-
-	    }, {
-	        key: 'clearEventHandler',
-	        value: function clearEventHandler(e) {
-	            if (this.state.canWithdraw) {
-	                this.clearFromCash(e);
-	            } else {
-	                this.clearFromPin(e);
-	            }
+	            this.setState({ state: 'gettingcash' });
+	            this.setState({ cash: e.detail.cash.toString() });
+	            setTimeout(function () {
+	                _this2.setState({ state: 'recieved' });
+	            }, 1000);
 	        }
 	    }, {
-	        key: 'clearFromCash',
-	        value: function clearFromCash(e) {
-	            this.clearErrorMsg();
-	            newStr = this.removeLastElem(this.state.cashInput);
-	            this.setState({ cashInput: newVal });
+	        key: 'returnCardHandler',
+	        value: function returnCardHandler(e) {
+	            this.setState({ state: 'insert' });
 	        }
 	    }, {
-	        key: 'clearFromPin',
-	        value: function clearFromPin(e) {
-	            this.clearErrorMsg();
-	            newStr = this.removeLastElem(this.state.pin);
-	            this.setState({ pin: newVal });
-	        }
-	    }, {
-	        key: 'removeLastElem',
-	        value: function removeLastElem(str) {
-	            if (str.length > 0) {
-	                return str.substring(0, str.length - 1);
-	            }
+	        key: 'newTransactionHandler',
+	        value: function newTransactionHandler(e) {
+	            this.setState({ state: 'withdraw' });
 	        }
 
-	        // Cancel
+	        // let prom = new Promise((res, rej) => {
+	        //         setTimeout(() => {
+	        //             res('Cash handling complete');
+	        //         }, 1000);
+	        //     })
 
-	    }, {
-	        key: 'cancelEventHandler',
-	        value: function cancelEventHandler(e) {
-	            this.clearErrorMsg();
-	            if (this.state.canWithdraw) {
-	                this.setState({ cashInput: '0' });
-	            } else {
-	                this.setState({ pin: '' });
-	            }
-	        }
-	    }, {
-	        key: 'enterEventHandler',
-	        value: function enterEventHandler(e) {
-	            console.log('enter');
-	            this.clearErrorMsg();
-	            this.checkPinAgainstUser();
-	        }
+	        //     prom.then((val) => {
+	        //                 this.setState({gettingCash: false});
+	        //                 this.setState({cashRecieved: true});
+	        //             });
 
-	        // Functions
+	        // Info:
+	        // I would generally have a custom loading state/component (for server calls) and split each section down into a component.
+	        // However as some of the sections are so small I believe it is cleaner to include them here.
 
-	    }, {
-	        key: 'clearErrorMsg',
-	        value: function clearErrorMsg() {
-	            this.setState({ errorMsg: '' });
-	        }
-	    }, {
-	        key: 'checkPinAgainstUser',
-	        value: function checkPinAgainstUser() {
-	            // TODO: get Pin from API via promise & run response in then statement
-	            // IRL Pin should be onfuscated via salt/hash/pepper when being sent to the server
-	            try {
-	                if (this.state.pin === '1234') {
-	                    // Set withdraw money screen
-	                    this.setState({ canWithdraw: true });
-	                } else if (this.state.pin.length < 4) {
-	                    var err = new Error('Sorry that pin is not long enough');
-	                    err.name = 'PinTooShort';
-	                    throw err;
-	                } else {
-	                    var _err = new Error('Sorry that pin is incorrect');
-	                    _err.name = 'IncorrectPin';
-	                    throw _err;
-	                }
-	            } catch (e) {
-	                this.setState({ errorMsg: e.message });
-	                console.log('error', e.message);
-	                // Error specific handling
-	                if (e.name === 'IncorrectPin') {} else if (e.name === 'PinTooShort') {} else {}
-	            }
-	        }
-
-	        // Computed Properties
-
-	    }, {
-	        key: 'obfuscatedPin',
-	        value: function obfuscatedPin(pin) {
-	            var obfsPin = '';
-	            for (var i = pin.length - 1; i >= 0; i--) {
-	                obfsPin = obfsPin.concat('x');
-	            }
-	            return obfsPin;
-	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { id: 'atm-component' },
 	                function () {
-	                    if (_this2.state.canWithdraw) {
+	                    if (_this3.state.state === 'insert') {
 	                        return _react2.default.createElement(
 	                            'div',
 	                            null,
 	                            _react2.default.createElement(
-	                                'p',
-	                                null,
-	                                '\'Select an option, or input the amount of PseudoMoney you wish to withdraw.\''
-	                            ),
-	                            _react2.default.createElement(
-	                                'h1',
-	                                { className: 'cash-display' },
-	                                '€',
-	                                _this2.state.cashInput
-	                            ),
-	                            _react2.default.createElement(_withdraw2.default, null)
-	                        );
-	                    } else {
-	                        return _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            _react2.default.createElement(
-	                                'p',
-	                                null,
-	                                '\'Please enter your PseudoBank PIN.\''
-	                            ),
-	                            _react2.default.createElement(
-	                                'h1',
-	                                { className: 'pin-display' },
-	                                _this2.obfuscatedPin(_this2.state.pin)
-	                            ),
-	                            _react2.default.createElement(
-	                                'h3',
-	                                { className: 'error-msg' },
-	                                _this2.state.errorMsg
+	                                'div',
+	                                { className: 'row' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'col-md-6 col-md-offset-3' },
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { type: 'button', onClick: _this3.insertCardHandler.bind(_this3), className: 'btn btn-primary btn-lg btn-block' },
+	                                        'Insert your PseudoBank card'
+	                                    )
+	                                )
 	                            )
 	                        );
+	                    } else if (_this3.state.state === 'withdraw') {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(_withdraw2.default, null),
+	                            _react2.default.createElement(_returncard2.default, null)
+	                        );
+	                    } else if (_this3.state.state === 'gettingcash') {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                'Please wait while we get your PseudoMoney.'
+	                            ),
+	                            _react2.default.createElement('div', { className: 'cash-loader', 'data-loader': 'circle' })
+	                        );
+	                    } else if (_this3.state.state === 'recieved') {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                'Please take your ',
+	                                _this3.state.cash,
+	                                ' PseudoMoney.'
+	                            ),
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                'Would you like to make another transaction?'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'row' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'col-md-6 col-md-offset-3' },
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { type: 'button', onClick: _this3.newTransactionHandler.bind(_this3), className: 'btn btn-primary btn-lg btn-block' },
+	                                        'Make another transaction.'
+	                                    )
+	                                )
+	                            ),
+	                            _react2.default.createElement(_returncard2.default, null)
+	                        );
+	                    } else if (_this3.state.state === 'pin') {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(_pin2.default, null),
+	                            _react2.default.createElement(_returncard2.default, null)
+	                        );
 	                    }
-	                }(),
-	                _react2.default.createElement(_keypad2.default, null)
+	                }()
 	            );
 	        }
 	    }]);
 
-	    return Pin;
+	    return Atm;
 	}(_react.Component);
 
-	exports.default = Pin;
+	exports.default = Atm;
 
 /***/ },
 /* 169 */
@@ -20436,7 +20393,276 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(170);
+	var _keypad = __webpack_require__(170);
+
+	var _keypad2 = _interopRequireDefault(_keypad);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Withdraw = function (_Component) {
+	    _inherits(Withdraw, _Component);
+
+	    function Withdraw(props) {
+	        _classCallCheck(this, Withdraw);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Withdraw).call(this, props));
+
+	        _this.state = {
+	            errorMsg: '',
+	            cashInput: '0'
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Withdraw, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var withdraw = document.getElementById('withdraw-component');
+	            withdraw.addEventListener('numPress', this.addToCash.bind(this), true);
+	            withdraw.addEventListener('clearPress', this.clearFromCash.bind(this), true);
+	            withdraw.addEventListener('cancelPress', this.cancelEventHandler.bind(this), true);
+	            withdraw.addEventListener('enterPress', this.enterEventHandler.bind(this), true);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            var withdraw = document.getElementById('withdraw-component');
+	            withdraw.removeEventListener('numPress', this.addToCash, true);
+	            withdraw.addEventListener('clearPress', this.clearFromCash, true);
+	            withdraw.addEventListener('cancelPress', this.cancelEventHandler, true);
+	            withdraw.addEventListener('enterPress', this.enterEventHandler, true);
+	        }
+	    }, {
+	        key: 'handleWithdrawX',
+	        value: function handleWithdrawX(i, e) {
+	            this.setState({ cashInput: i.toString() });
+	        }
+	    }, {
+	        key: 'cancelEventHandler',
+	        value: function cancelEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.setState({ cashInput: '0' });
+	        }
+	    }, {
+	        key: 'enterEventHandler',
+	        value: function enterEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.getCash();
+	        }
+	    }, {
+	        key: 'addToCash',
+	        value: function addToCash(e) {
+	            this.clearErrorMsg();
+	            var val = this.state.cashInput;
+	            var newVal = e.detail.number.toString();
+
+	            if (val === '0') {
+	                val = '';
+	            }
+	            this.setState({ cashInput: val.concat(newVal) });
+	        }
+	    }, {
+	        key: 'clearFromCash',
+	        value: function clearFromCash(e) {
+	            this.clearErrorMsg();
+	            this.setState({ cashInput: this.removeLastElem(this.state.cashInput) });
+	        }
+
+	        // Functions
+
+	    }, {
+	        key: 'removeLastElem',
+	        value: function removeLastElem(str) {
+	            if (str.length > 0) {
+	                return str.substring(0, str.length - 1);
+	            } else {
+	                return '0';
+	            }
+	        }
+	    }, {
+	        key: 'clearErrorMsg',
+	        value: function clearErrorMsg() {
+	            this.setState({ errorMsg: '' });
+	        }
+	    }, {
+	        key: 'getCash',
+	        value: function getCash() {
+	            try {
+	                var cashStr = this.state.cashInput;
+
+	                var isMultiOfTen = parseInt(cashStr, 10) % 10 == 0;
+
+	                console.log('isMultiOfTen', isMultiOfTen, parseInt(cashStr, 10));
+
+	                if (cashStr === '0') {
+	                    var err = new Error('Sorry you must input an amount greater than 0');
+	                    err.name = 'CashTooLow';
+	                    throw err;
+	                } else if (isMultiOfTen) {
+	                    // Send change screen event
+	                    var submit = new CustomEvent('cashSubmit', { 'detail': { 'cash': cashStr } });
+	                    var withdrawComponent = document.getElementById('withdraw-component');
+	                    withdrawComponent.dispatchEvent(submit);
+	                } else {
+	                    var _err = new Error('Sorry you must input a multiple of 10');
+	                    _err.name = 'MustBeTenMulti';
+	                    throw _err;
+	                }
+	            } catch (e) {
+	                this.setState({ errorMsg: e.message });
+	                console.log('error', e.message);
+	                // Error specific handling
+	                if (e.name === 'MustBeTenMulti') {} else if (e.name === 'CashTooLow') {} else {}
+	            }
+	        }
+
+	        // TODO: Replace this with a map/reduce function
+
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'withdraw-component', className: 'withdraw' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    '\'Select an option, or input the amount of PseudoMoney you wish to withdraw.\''
+	                ),
+	                _react2.default.createElement(
+	                    'h1',
+	                    { className: 'cash-display' },
+	                    '€',
+	                    this.state.cashInput
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'error-msg' },
+	                    this.state.errorMsg
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 50), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '50'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 150), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '150'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 250), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '250'
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 100), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '100'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 200), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '200'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 300), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '300'
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(_keypad2.default, null)
+	            );
+	        }
+	    }]);
+
+	    return Withdraw;
+	}(_react.Component);
+
+	exports.default = Withdraw;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	__webpack_require__(171);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20493,7 +20719,7 @@
 	            keypad.dispatchEvent(enterEvent);
 	        }
 
-	        // TODO: Replace this with a map/reduce function
+	        // TODO: Replace this with a loop/map
 
 	    }, {
 	        key: 'render',
@@ -20668,16 +20894,16 @@
 	exports.default = Keypad;
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(171);
+	var content = __webpack_require__(172);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(173)(content, {});
+	var update = __webpack_require__(174)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20694,10 +20920,10 @@
 	}
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(172)();
+	exports = module.exports = __webpack_require__(173)();
 	// imports
 
 
@@ -20708,7 +20934,7 @@
 
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports) {
 
 	/*
@@ -20764,7 +20990,7 @@
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21016,7 +21242,7 @@
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21039,135 +21265,342 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Withdraw = function (_Component) {
-	    _inherits(Withdraw, _Component);
+	var Returncard = function (_Component) {
+	    _inherits(Returncard, _Component);
 
-	    function Withdraw(props) {
-	        _classCallCheck(this, Withdraw);
+	    function Returncard(props) {
+	        _classCallCheck(this, Returncard);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Withdraw).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Returncard).call(this, props));
 
 	        _this.state = {};
 	        return _this;
 	    }
 
-	    // TODO:
-	    //
-
-	    _createClass(Withdraw, [{
-	        key: 'handleWithdrawX',
-	        value: function handleWithdrawX(i, e) {
-	            var cancelEvent = new CustomEvent('cancelPress');
-	            var keypad = document.getElementById('keypad');
-	            keypad.dispatchEvent(cancelEvent);
+	    _createClass(Returncard, [{
+	        key: 'handleReturnClick',
+	        value: function handleReturnClick(e) {
+	            var numEvent = new CustomEvent('returnCard');
+	            var returncard = document.getElementById('returncard');
+	            returncard.dispatchEvent(numEvent);
 	        }
 
-	        // TODO: Replace this with a map/reduce function
+	        // TODO: Replace this with a loop/map
 
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { id: 'withdraw', className: 'withdraw' },
+	                { id: 'returncard', className: 'row' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'col-md-6 col-md-offset-3' },
 	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-6' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 50), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '50'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 150), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '150'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 250), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '250'
-	                                )
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-6' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 100), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '100'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 200), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '200'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 300), className: 'btn btn-primary btn-lg btn-block' },
-	                                    '300'
-	                                )
-	                            )
-	                        )
+	                        'button',
+	                        { type: 'button', onClick: this.handleReturnClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
+	                        'Return my card.'
 	                    )
 	                )
 	            );
 	        }
 	    }]);
 
-	    return Withdraw;
+	    return Returncard;
 	}(_react.Component);
 
-	exports.default = Withdraw;
+	exports.default = Returncard;
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _keypad = __webpack_require__(170);
+
+	var _keypad2 = _interopRequireDefault(_keypad);
+
+	__webpack_require__(177);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Pin = function (_Component) {
+	    _inherits(Pin, _Component);
+
+	    function Pin(props) {
+	        _classCallCheck(this, Pin);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Pin).call(this, props));
+
+	        _this.state = {
+	            pin: '',
+	            errorMsg: ''
+	        };
+	        return _this;
+	    }
+
+	    // Functionality:
+	    // x Recieve number events
+	    // x Clear event - remove last number from end of string
+	    // x Cancel - clear string
+	    // x Enter - Failure (Error message)
+	    // x Obfuscate pin
+	    // x Limit pin to 4 nums
+	    // x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+	    // x Only allow values in multiples of 10
+
+	    // TODO:
+	    // Split out into two subcomponents with an instance of keypad each.
+
+	    _createClass(Pin, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var pin = document.getElementById('pin-component');
+	            pin.addEventListener('numPress', this.numEventHandler.bind(this), true);
+	            pin.addEventListener('clearPress', this.clearFromPin.bind(this), true);
+	            pin.addEventListener('cancelPress', this.cancelEventHandler.bind(this), true);
+	            pin.addEventListener('enterPress', this.enterEventHandler.bind(this), true);
+	            pin.addEventListener('setNumber', this.setNumEventHandler.bind(this), true);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            var pin = document.getElementById('pin-component');
+	            pin.removeEventListener('numPress', this.numEventHandler, true);
+	            pin.addEventListener('clearPress', this.clearFromPin, true);
+	            pin.addEventListener('cancelPress', this.cancelEventHandler, true);
+	            pin.addEventListener('enterPress', this.enterEventHandler, true);
+	            pin.addEventListener('setNumber', this.setNumEventHandler, true);
+	        }
+
+	        // Event Handlers
+
+	        // Add num
+
+	    }, {
+	        key: 'numEventHandler',
+	        value: function numEventHandler(e) {
+	            if (this.state.pin.length < 4) {
+	                this.clearErrorMsg();
+	                var newPin = e.detail.number.toString();
+	                this.setState({ pin: this.state.pin.concat(newPin) });
+	            }
+	        }
+
+	        // Clear
+
+	    }, {
+	        key: 'clearFromPin',
+	        value: function clearFromPin(e) {
+	            this.clearErrorMsg();
+	            this.setState({ pin: this.removeLastElem(this.state.pin) });
+	        }
+	    }, {
+	        key: 'removeLastElem',
+	        value: function removeLastElem(str) {
+	            if (str.length > 0) {
+	                return str.substring(0, str.length - 1);
+	            } else {
+	                return '';
+	            }
+	        }
+
+	        // Cancel
+
+	    }, {
+	        key: 'cancelEventHandler',
+	        value: function cancelEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.setState({ pin: '' });
+	        }
+	    }, {
+	        key: 'enterEventHandler',
+	        value: function enterEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.checkPinAgainstUser();
+	        }
+
+	        // Set Number
+
+	    }, {
+	        key: 'setNumEventHandler',
+	        value: function setNumEventHandler(e) {
+	            this.setState({ cashInput: e.detail.number.toString() });
+	        }
+
+	        // Functions
+
+	    }, {
+	        key: 'clearErrorMsg',
+	        value: function clearErrorMsg() {
+	            this.setState({ errorMsg: '' });
+	        }
+	    }, {
+	        key: 'checkPinAgainstUser',
+	        value: function checkPinAgainstUser() {
+	            // TODO: get Pin from API via promise & run response in then statement
+	            // IRL Pin should be onfuscated via salt/hash/pepper when being sent to the server
+	            try {
+	                if (this.state.pin === '1234') {
+	                    // Send pin correct event
+	                    var pinEvent = new CustomEvent('pinCorrect');
+	                    var pinComponent = document.getElementById('pin-component');
+	                    pinComponent.dispatchEvent(pinEvent);
+	                } else if (this.state.pin.length < 4) {
+	                    var err = new Error('Sorry that pin is not long enough');
+	                    err.name = 'PinTooShort';
+	                    throw err;
+	                } else {
+	                    var _err = new Error('Sorry that pin is incorrect');
+	                    _err.name = 'IncorrectPin';
+	                    throw _err;
+	                }
+	            } catch (e) {
+	                this.setState({ errorMsg: e.message });
+	                console.log('error', e.message);
+	                // Error specific handling
+	                if (e.name === 'IncorrectPin') {} else if (e.name === 'PinTooShort') {} else {}
+	            }
+	        }
+
+	        // Computed Properties
+
+	    }, {
+	        key: 'obfuscatedPin',
+	        value: function obfuscatedPin(pin) {
+	            var obfsPin = '';
+	            for (var i = pin.length - 1; i >= 0; i--) {
+	                obfsPin = obfsPin.concat('x');
+	            }
+	            return obfsPin;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'pin-component' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Please enter your PseudoBank PIN.'
+	                ),
+	                _react2.default.createElement(
+	                    'h1',
+	                    { className: 'pin-display' },
+	                    this.obfuscatedPin(this.state.pin)
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'error-msg' },
+	                    this.state.errorMsg
+	                ),
+	                _react2.default.createElement(_keypad2.default, null)
+	            );
+	        }
+	    }]);
+
+	    return Pin;
+	}(_react.Component);
+
+	exports.default = Pin;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(178);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(174)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(173)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".pin-display {\n  min-height: 40px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(180);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(174)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(173)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".cash-loader {\n  display: block;\n  margin-left: auto;\n  margin-right: auto;\n  width: 50px;\n  height: 50px;\n  border: 4px solid #285e8e;\n  border-top-color: transparent;\n  border-radius: 100%;\n}\n.btn {\n  margin-top: 20px;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

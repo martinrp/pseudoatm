@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Pin from 'components/pin';
+import ATM from 'components/atm';
 
-ReactDOM.render(<Pin />, document.getElementById('pin'));
+ReactDOM.render(<ATM />, document.getElementById('atm'));
