@@ -9,7 +9,7 @@ exports.setup = function(runningApp, callback) {
   runningApp.engine('handlebars', require('hbs').__express);
 
   //---- Mounting application modules
-  runningApp.use('/atm', require('hello'));
+  runningApp.use('/atm', require('atm'));
 
   // API endpoint attached to root route:
   runningApp.use('/', require('homedoc'));
