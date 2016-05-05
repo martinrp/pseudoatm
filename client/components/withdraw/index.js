@@ -109,12 +109,10 @@ class Withdraw extends Component {
     render() {
         return ( 
             <div id='withdraw-component' className='withdraw'>
-                <p>'Select an option, or input the amount of PseudoMoney you wish to withdraw.'</p>
+                <p>Select an option, or input the amount of PseudoMoney you wish to withdraw.</p>
                 <h1 className="cash-display">&#8364;{this.state.cashInput}</h1>
                 <h3 className="error-msg">{this.state.errorMsg}</h3>
                 <div className="row">
-
-                    
 
                     <div className="col-md-6">
                         <div className="row">

@@ -20227,6 +20227,7 @@
 	            atm.addEventListener('pinCorrect', this.pinCorrectHandler.bind(this), true);
 	            atm.addEventListener('cashSubmit', this.cashSubmitHandler.bind(this), true);
 	            atm.addEventListener('returnCard', this.returnCardHandler.bind(this), true);
+	            atm.addEventListener('reinputPin', this.reinputPinHandler.bind(this), true);
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
@@ -20234,7 +20235,8 @@
 	            var atm = document.getElementById('atm-component');
 	            atm.removeEventListener('pinCorrect', this.pinCorrectHandler, true);
 	            atm.removeEventListener('cashSubmit', this.cashSubmitHandler, true);
-	            atm.removeEventListener('cashSubmit', this.returnCardHandler, true);
+	            atm.removeEventListener('returnCard', this.returnCardHandler, true);
+	            atm.removeEventListener('reinputPin', this.reinputPinHandler, true);
 	        }
 	    }, {
 	        key: 'pinCorrectHandler',
@@ -20266,6 +20268,11 @@
 	        key: 'newTransactionHandler',
 	        value: function newTransactionHandler(e) {
 	            this.setState({ state: 'withdraw' });
+	        }
+	    }, {
+	        key: 'reinputPinHandler',
+	        value: function reinputPinHandler(e) {
+	            this.setState({ state: 'pin' });
 	        }
 
 	        // let prom = new Promise((res, rej) => {
@@ -20315,7 +20322,20 @@
 	                            'div',
 	                            null,
 	                            _react2.default.createElement(_withdraw2.default, null),
-	                            _react2.default.createElement(_returncard2.default, null)
+	                            _react2.default.createElement(_returncard2.default, null),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'row' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'col-md-6 col-md-offset-3' },
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { type: 'button', onClick: _this3.reinputPinHandler.bind(_this3), className: 'btn btn-primary btn-lg btn-block' },
+	                                        'Try putting my pin in again for some reason.'
+	                                    )
+	                                )
+	                            )
 	                        );
 	                    } else if (_this3.state.state === 'gettingcash') {
 	                        return _react2.default.createElement(
@@ -20533,7 +20553,7 @@
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    '\'Select an option, or input the amount of PseudoMoney you wish to withdraw.\''
+	                    'Select an option, or input the amount of PseudoMoney you wish to withdraw.'
 	                ),
 	                _react2.default.createElement(
 	                    'h1',
@@ -20719,6 +20739,31 @@
 	            keypad.dispatchEvent(enterEvent);
 	        }
 
+	        // Minor bug: tried nested for loops with outer row divs and it causes an error. This works fine with bootstrap so leaving without.
+
+	    }, {
+	        key: 'createBtnGrid',
+	        value: function createBtnGrid() {
+	            var rows = [];
+	            for (var i = 1; i <= 3; i++) {
+	                // rows.push(<div className='row'>);
+	                for (var j = p; j <= 3; j++) {
+	                    var elemNum = i * j;
+	                    rows.push(_react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-4' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'button', onClick: this.handleNumClick.bind(this, elemNum), className: 'btn btn-default btn-lg btn-block' },
+	                            elemNum
+	                        )
+	                    ));
+	                }
+	                // rows.push(</div>);
+	            }
+	            return rows;
+	        }
+
 	        // TODO: Replace this with a loop/map
 
 	    }, {
@@ -20733,99 +20778,7 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-md-8' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 1), className: 'btn btn-default btn-lg btn-block' },
-	                                    '1'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 2), className: 'btn btn-default btn-lg btn-block' },
-	                                    '2'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 3), className: 'btn btn-default btn-lg btn-block' },
-	                                    '3'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 4), className: 'btn btn-default btn-lg btn-block' },
-	                                    '4'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 5), className: 'btn btn-default btn-lg btn-block' },
-	                                    '5'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 6), className: 'btn btn-default btn-lg btn-block' },
-	                                    '6'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 7), className: 'btn btn-default btn-lg btn-block' },
-	                                    '7'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 8), className: 'btn btn-default btn-lg btn-block' },
-	                                    '8'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 9), className: 'btn btn-default btn-lg btn-block' },
-	                                    '9'
-	                                )
-	                            )
-	                        ),
+	                        this.createBtnGrid(),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'row' },
@@ -21365,9 +21318,6 @@
 	    // x Limit pin to 4 nums
 	    // x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
 	    // x Only allow values in multiples of 10
-
-	    // TODO:
-	    // Split out into two subcomponents with an instance of keypad each.
 
 	    _createClass(Pin, [{
 	        key: 'componentDidMount',

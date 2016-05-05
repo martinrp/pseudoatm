@@ -37,13 +37,15 @@ class Atm extends Component {
         atm.addEventListener('pinCorrect', this.pinCorrectHandler.bind(this), true);
         atm.addEventListener('cashSubmit', this.cashSubmitHandler.bind(this), true);
         atm.addEventListener('returnCard', this.returnCardHandler.bind(this), true);
+        atm.addEventListener('reinputPin', this.reinputPinHandler.bind(this), true);
     }
 
     componentWillUnmount() {
         let atm = document.getElementById('atm-component');
         atm.removeEventListener('pinCorrect', this.pinCorrectHandler, true);
         atm.removeEventListener('cashSubmit', this.cashSubmitHandler, true);
-        atm.removeEventListener('cashSubmit', this.returnCardHandler, true);
+        atm.removeEventListener('returnCard', this.returnCardHandler, true);
+        atm.removeEventListener('reinputPin', this.reinputPinHandler, true);
     }
 
     pinCorrectHandler(e) {
@@ -68,6 +70,10 @@ class Atm extends Component {
 
     newTransactionHandler(e) {
         this.setState({state: 'withdraw'});
+    }
+
+    reinputPinHandler(e) {
+        this.setState({state: 'pin'});
     }
 
     // let prom = new Promise((res, rej) => {
@@ -104,6 +110,11 @@ class Atm extends Component {
                             <div>
                                 <Withdraw/>
                                 <Returncard/>
+                                <div className="row">
+                                    <div className="col-md-6 col-md-offset-3">
+                                        <button type="button" onClick={this.reinputPinHandler.bind(this)} className="btn btn-primary btn-lg btn-block">Try putting my pin in again for some reason.</button>
+                                    </div>
+                                </div>
                             </div>
                         )
                     } else if(this.state.state === 'gettingcash') {

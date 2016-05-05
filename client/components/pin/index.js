@@ -23,9 +23,6 @@ class Pin extends Component {
     // x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
     // x Only allow values in multiples of 10
 
-    // TODO:
-    // Split out into two subcomponents with an instance of keypad each.
-
     componentDidMount() {
         let pin = document.getElementById('pin-component');
         pin.addEventListener('numPress', this.numEventHandler.bind(this), true);
