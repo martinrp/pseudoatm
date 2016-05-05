@@ -76,17 +76,6 @@ class Atm extends Component {
         this.setState({state: 'pin'});
     }
 
-    // let prom = new Promise((res, rej) => {
-    //         setTimeout(() => {
-    //             res('Cash handling complete');
-    //         }, 1000);
-    //     })
-
-    //     prom.then((val) => {
-    //                 this.setState({gettingCash: false});
-    //                 this.setState({cashRecieved: true});
-    //             });
-
     // Info:
     // I would generally have a custom loading state/component (for server calls) and split each section down into a component.
     // However as some of the sections are so small I believe it is cleaner to include them here.

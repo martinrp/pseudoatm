@@ -85,8 +85,8 @@ class Pin extends Component {
     }
 
     checkPinAgainstUser() {
-        // TODO: get Pin from API via promise & run response in then statement
-        // IRL Pin should be onfuscated via salt/hash/pepper when being sent to the server
+        // ShouldDo: get Pin from backend API via promise & run response in then statement
+        // IRL Pin should be obfuscated via salt/hash/pepper when being sent to the server
         try {
             if (this.state.pin === '1234'){
                 // Send pin correct event
