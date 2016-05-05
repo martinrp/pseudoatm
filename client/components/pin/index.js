@@ -8,7 +8,6 @@ class Pin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            primaryMsg: 'Please enter your PseudoBank PIN.',
             pin: '',
             errorMsg: '',
             canWithdraw: false,
@@ -58,7 +57,7 @@ class Pin extends Component {
 
     handleCashInput(e){
         this.clearErrorMsg();
-        let val = this.state.cash
+        let val = this.state.cashInput
         let newVal = e.detail.number.toString();
 
         if (val === '0'){ val = ''; }
@@ -146,20 +145,21 @@ class Pin extends Component {
     render() {
         return (
             <div>
-                <p>{this.state.primaryMsg}</p>
                 {(() => {
-                    if(!this.state.canWithdraw){
+                    if(this.state.canWithdraw){
                         return (
                             <div>
-                                <h1 className="pin-display">{this.obfuscatedPin(this.state.pin)}</h1>
-                                <h3 className="error-msg">{this.state.errorMsg}</h3>
+                                <p>'Select an option, or input the amount of PseudoMoney you wish to withdraw.'</p>
+                                <h1 className="cash-display">&#8364;{this.state.cashInput}</h1>
+                                <Withdraw/>
                             </div>
                         )
                     } else {
                         return (
                             <div>
-                                <h1 className="cash-display">&#8364;{this.state.cashInput}</h1>
-                                <Withdraw/>
+                                <p>'Please enter your PseudoBank PIN.'</p>
+                                <h1 className="pin-display">{this.obfuscatedPin(this.state.pin)}</h1>
+                                <h3 className="error-msg">{this.state.errorMsg}</h3>
                             </div>
                         )
                     }

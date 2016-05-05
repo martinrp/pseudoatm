@@ -20191,7 +20191,6 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Pin).call(this, props));
 
 	        _this.state = {
-	            primaryMsg: 'Please enter your PseudoBank PIN.',
 	            pin: '',
 	            errorMsg: '',
 	            canWithdraw: false,
@@ -20252,7 +20251,7 @@
 	        key: 'handleCashInput',
 	        value: function handleCashInput(e) {
 	            this.clearErrorMsg();
-	            var val = this.state.cash;
+	            var val = this.state.cashInput;
 	            var newVal = e.detail.number.toString();
 
 	            if (val === '0') {
@@ -20348,16 +20347,33 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    this.state.primaryMsg
-	                ),
 	                function () {
-	                    if (!_this2.state.canWithdraw) {
+	                    if (_this2.state.canWithdraw) {
 	                        return _react2.default.createElement(
 	                            'div',
 	                            null,
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                '\'Select an option, or input the amount of PseudoMoney you wish to withdraw.\''
+	                            ),
+	                            _react2.default.createElement(
+	                                'h1',
+	                                { className: 'cash-display' },
+	                                '€',
+	                                _this2.state.cashInput
+	                            ),
+	                            _react2.default.createElement(_withdraw2.default, null)
+	                        );
+	                    } else {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                '\'Please enter your PseudoBank PIN.\''
+	                            ),
 	                            _react2.default.createElement(
 	                                'h1',
 	                                { className: 'pin-display' },
@@ -20368,18 +20384,6 @@
 	                                { className: 'error-msg' },
 	                                _this2.state.errorMsg
 	                            )
-	                        );
-	                    } else {
-	                        return _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            _react2.default.createElement(
-	                                'h1',
-	                                { className: 'cash-display' },
-	                                '€',
-	                                _this2.state.cashInput
-	                            ),
-	                            _react2.default.createElement(_withdraw2.default, null)
 	                        );
 	                    }
 	                }(),
