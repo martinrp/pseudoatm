@@ -46,7 +46,7 @@ class Keypad extends Component {
         let rows = [];
         for (let i=1; i <= 3; i++) {
             // rows.push(<div className='row'>);
-            for (let j=p; j <= 3; j++) {
+            for (let j=1; j <= 3; j++) {
                 let elemNum = i * j;
                 rows.push(
                     <div className='col-md-4'>
