@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import Keypad from '../keypad'
+import Withdraw from '../withdraw'
  
 class Pin extends Component {
     constructor(props) {

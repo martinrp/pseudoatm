@@ -1,7 +1,6 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {} from './style.less';
  
 class Withdraw extends Component {
 
@@ -11,10 +10,7 @@ class Withdraw extends Component {
     }    
 
     // TODO:
-    // Function which sends number
-    // Emit number from Keypad
-    // Emit function buttons from keypad
-    // Return card button
+    // 
 
     handleWithdrawX(i, e) {
         let cancelEvent = new CustomEvent('cancelPress');

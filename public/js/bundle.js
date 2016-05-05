@@ -20170,6 +20170,10 @@
 
 	var _keypad2 = _interopRequireDefault(_keypad);
 
+	var _withdraw = __webpack_require__(174);
+
+	var _withdraw2 = _interopRequireDefault(_withdraw);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20375,7 +20379,7 @@
 	                                '€',
 	                                _this2.state.cashInput
 	                            ),
-	                            _react2.default.createElement(Withdraw, null)
+	                            _react2.default.createElement(_withdraw2.default, null)
 	                        );
 	                    }
 	                }(),
@@ -20983,6 +20987,160 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Withdraw = function (_Component) {
+	    _inherits(Withdraw, _Component);
+
+	    function Withdraw(props) {
+	        _classCallCheck(this, Withdraw);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Withdraw).call(this, props));
+
+	        _this.state = {};
+	        return _this;
+	    }
+
+	    // TODO:
+	    //
+
+	    _createClass(Withdraw, [{
+	        key: 'handleWithdrawX',
+	        value: function handleWithdrawX(i, e) {
+	            var cancelEvent = new CustomEvent('cancelPress');
+	            var keypad = document.getElementById('keypad');
+	            keypad.dispatchEvent(cancelEvent);
+	        }
+
+	        // TODO: Replace this with a map/reduce function
+
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'withdraw', className: 'withdraw' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 50), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '50'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 150), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '150'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 250), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '250'
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 100), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '100'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 200), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '200'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-12' },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'button', onClick: this.handleWithdrawX.bind(this, 300), className: 'btn btn-primary btn-lg btn-block' },
+	                                    '300'
+	                                )
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Withdraw;
+	}(_react.Component);
+
+	exports.default = Withdraw;
 
 /***/ }
 /******/ ]);
