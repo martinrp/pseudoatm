@@ -20203,10 +20203,13 @@
 	    // x Recieve number events
 	    // x Clear event - remove last number from end of string
 	    // x Cancel - clear string
-	    // Enter - Success / Failure - with delay (Server API call if time, else just a timeout & spinner)
-	    // x Enter - Failure Error message
+	    // x Enter - Failure (Error message)
 	    // x Obfuscate pin
 	    // x Limit pin to 4 nums
+	    // Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+
+	    // TODO:
+	    // Split out into two subcomponents with an instance of keypad each.
 
 	    _createClass(Pin, [{
 	        key: 'componentDidMount',
@@ -20229,18 +20232,20 @@
 
 	        // Event Handlers
 
+	        // Add num
+
 	    }, {
 	        key: 'numEventHandler',
 	        value: function numEventHandler(e) {
 	            if (this.state.canWithdraw) {
-	                this.handleCashInput(e);
+	                this.addToCash(e);
 	            } else {
-	                this.handlePinInput(e);
+	                this.addToPin(e);
 	            }
 	        }
 	    }, {
-	        key: 'handlePinInput',
-	        value: function handlePinInput(e) {
+	        key: 'addToPin',
+	        value: function addToPin(e) {
 	            if (this.state.pin.length < 4) {
 	                this.clearErrorMsg();
 	                var newPin = e.detail.number.toString();
@@ -20248,8 +20253,8 @@
 	            }
 	        }
 	    }, {
-	        key: 'handleCashInput',
-	        value: function handleCashInput(e) {
+	        key: 'addToCash',
+	        value: function addToCash(e) {
 	            this.clearErrorMsg();
 	            var val = this.state.cashInput;
 	            var newVal = e.detail.number.toString();
@@ -20257,19 +20262,24 @@
 	            if (val === '0') {
 	                val = '';
 	            }
-	            this.setState({ pin: val.concat(newVal) });
+	            this.setState({ cashInput: val.concat(newVal) });
 	        }
 
-	        //
+	        // Clear
 
 	    }, {
 	        key: 'clearEventHandler',
 	        value: function clearEventHandler(e) {
-	            var target = this.state.pin;
 	            if (this.state.canWithdraw) {
-	                target = this.state.cashInput;
+	                this.clearFromCash(e);
+	            } else {
+	                this.clearFromPin(e);
 	            }
-
+	        }
+	    }, {
+	        key: 'clearFromCash',
+	        value: function clearFromCash(e) {
+	            var target = this.state.pin;
 	            var leng = target.length;
 	            if (leng > 0) {
 	                this.clearErrorMsg();
@@ -20277,6 +20287,23 @@
 	                this.setState({ pin: newVal });
 	            }
 	        }
+
+	        // TODO: Refactor down into reusable function
+
+	    }, {
+	        key: 'clearFromPin',
+	        value: function clearFromPin(e) {
+	            var target = this.state.pin;
+	            var leng = target.length;
+	            if (leng > 0) {
+	                this.clearErrorMsg();
+	                var newVal = target.substring(0, leng - 1);
+	                this.setState({ pin: newVal });
+	            }
+	        }
+
+	        // Cancel
+
 	    }, {
 	        key: 'cancelEventHandler',
 	        value: function cancelEventHandler(e) {

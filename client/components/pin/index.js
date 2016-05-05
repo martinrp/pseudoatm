@@ -19,10 +19,13 @@ class Pin extends Component {
     // x Recieve number events
     // x Clear event - remove last number from end of string
     // x Cancel - clear string
-    // Enter - Success / Failure - with delay (Server API call if time, else just a timeout & spinner)
-    // x Enter - Failure Error message
+    // x Enter - Failure (Error message)
     // x Obfuscate pin
     // x Limit pin to 4 nums
+    // Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+
+    // TODO:
+    // Split out into two subcomponents with an instance of keypad each.
 
     componentDidMount() {
         let keypad = document.getElementById('keypad');
@@ -42,12 +45,13 @@ class Pin extends Component {
 
     // Event Handlers
 
+    // Add num
     numEventHandler(e) {
-        if (this.state.canWithdraw){ this.handleCashInput(e); }
-        else { this.handlePinInput(e); }
+        if (this.state.canWithdraw){ this.addToCash(e); }
+        else { this.addToPin(e); }
     }
 
-    handlePinInput(e){
+    addToPin(e){
         if (this.state.pin.length < 4 ){
             this.clearErrorMsg();
             let newPin = e.detail.number.toString();
@@ -55,31 +59,38 @@ class Pin extends Component {
         }
     }
 
-    handleCashInput(e){
+    addToCash(e){
         this.clearErrorMsg();
         let val = this.state.cashInput
         let newVal = e.detail.number.toString();
 
         if (val === '0'){ val = ''; }
-        this.setState({ pin: val.concat(newVal) });
+        this.setState({ cashInput: val.concat(newVal) });
     }
 
-    // 
-
-    clearEventHandler(e) {
-        let target = this.state.pin;
-        if (this.state.canWithdraw){
-            target = this.state.cashInput;
-        }
-
-        let leng = target.length;
-        if (leng > 0 ){
-            this.clearErrorMsg();
-            let newVal = target.substring(0, leng - 1);
-            this.setState({ pin: newVal });
-        }
+    // Clear
+    clearEventHandler(e) {    
+        if (this.state.canWithdraw){ this.clearFromCash(e); } 
+        else { this.clearFromPin(e); }
     }
 
+    clearFromCash(e){
+        this.clearErrorMsg();
+        newStr = removeLastElem(this.state.cashInput);
+        this.setState({ cashInput: newVal });
+    }
+
+    clearFromPin(e){
+        this.clearErrorMsg();
+        newStr = removeLastElem(this.state.pin);
+        this.setState({ pin: newVal });
+    }
+
+    removeLastElem(str){
+        if (str.length > 0 ){ return str.substring(0, leng - 1); }
+    }
+
+    // Cancel
     cancelEventHandler(e) {
         this.clearErrorMsg();
         if (this.state.canWithdraw){
