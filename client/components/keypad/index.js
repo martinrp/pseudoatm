@@ -40,21 +40,20 @@ class Keypad extends Component {
         keypad.dispatchEvent(enterEvent);
     }
 
-    // Minor bug: tried nested for loops with outer row divs and it causes an error. This works fine with bootstrap so leaving without.
+    // Minor bug: tried using outer row divs and it causes a compile error with webpack. This works fine with bootstrap so leaving without.
 
     createBtnGrid(){
         let rows = [];
-        for (let i=1; i <= 3; i++) {
-            // rows.push(<div className='row'>);
-            for (let j=1; j <= 3; j++) {
-                let elemNum = i * j;
-                rows.push(
-                    <div className='col-md-4'>
-                        <button type='button' onClick={this.handleNumClick.bind(this, elemNum)} className='btn btn-default btn-lg btn-block'>{elemNum}</button>
-                    </div>
-                );
-            }
-            // rows.push(</div>);
+        let count = 1;
+        while (count < 10){
+            // if (count%3){ rows.push(<div className='row'>) }
+            rows.push(
+                <div key={count} className='col-md-4'>
+                    <button type='button' onClick={this.handleNumClick.bind(this, count)} className='btn btn-default btn-lg btn-block'>{count}</button>
+                </div>
+            );
+            // if (count%3){ rows.push(</div>) }
+            count++
         }
         return rows;
     }

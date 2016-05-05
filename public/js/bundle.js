@@ -20170,15 +20170,15 @@
 
 	var _withdraw2 = _interopRequireDefault(_withdraw);
 
-	var _returncard = __webpack_require__(175);
+	var _returncard = __webpack_require__(171);
 
 	var _returncard2 = _interopRequireDefault(_returncard);
 
-	var _pin = __webpack_require__(176);
+	var _pin = __webpack_require__(172);
 
 	var _pin2 = _interopRequireDefault(_pin);
 
-	__webpack_require__(179);
+	__webpack_require__(177);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20413,7 +20413,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _keypad = __webpack_require__(170);
+	var _keypad = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../keypad\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _keypad2 = _interopRequireDefault(_keypad);
 
@@ -20667,7 +20667,8 @@
 	exports.default = Withdraw;
 
 /***/ },
-/* 170 */
+/* 170 */,
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20682,8 +20683,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(171);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20692,76 +20691,24 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Keypad = function (_Component) {
-	    _inherits(Keypad, _Component);
+	var Returncard = function (_Component) {
+	    _inherits(Returncard, _Component);
 
-	    function Keypad(props) {
-	        _classCallCheck(this, Keypad);
+	    function Returncard(props) {
+	        _classCallCheck(this, Returncard);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Keypad).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Returncard).call(this, props));
 
 	        _this.state = {};
 	        return _this;
 	    }
 
-	    // TODO:
-	    // Function which sends number
-	    // Emit number from Keypad
-	    // Emit function buttons from keypad
-	    // Return card button
-
-	    _createClass(Keypad, [{
-	        key: 'handleNumClick',
-	        value: function handleNumClick(i, e) {
-	            var numEvent = new CustomEvent('numPress', { 'detail': { 'number': i } });
-	            var keypad = document.getElementById('keypad');
-	            keypad.dispatchEvent(numEvent);
-	        }
-	    }, {
-	        key: 'handleCancelClick',
-	        value: function handleCancelClick(i, e) {
-	            var cancelEvent = new CustomEvent('cancelPress');
-	            var keypad = document.getElementById('keypad');
-	            keypad.dispatchEvent(cancelEvent);
-	        }
-	    }, {
-	        key: 'handleClearClick',
-	        value: function handleClearClick(i, e) {
-	            var clearEvent = new CustomEvent('clearPress');
-	            var keypad = document.getElementById('keypad');
-	            keypad.dispatchEvent(clearEvent);
-	        }
-	    }, {
-	        key: 'handleEnterClick',
-	        value: function handleEnterClick(i, e) {
-	            var enterEvent = new CustomEvent('enterPress');
-	            var keypad = document.getElementById('keypad');
-	            keypad.dispatchEvent(enterEvent);
-	        }
-
-	        // Minor bug: tried nested for loops with outer row divs and it causes an error. This works fine with bootstrap so leaving without.
-
-	    }, {
-	        key: 'createBtnGrid',
-	        value: function createBtnGrid() {
-	            var rows = [];
-	            for (var i = 1; i <= 3; i++) {
-	                // rows.push(<div className='row'>);
-	                for (var j = p; j <= 3; j++) {
-	                    var elemNum = i * j;
-	                    rows.push(_react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-4' },
-	                        _react2.default.createElement(
-	                            'button',
-	                            { type: 'button', onClick: this.handleNumClick.bind(this, elemNum), className: 'btn btn-default btn-lg btn-block' },
-	                            elemNum
-	                        )
-	                    ));
-	                }
-	                // rows.push(</div>);
-	            }
-	            return rows;
+	    _createClass(Returncard, [{
+	        key: 'handleReturnClick',
+	        value: function handleReturnClick(e) {
+	            var numEvent = new CustomEvent('returnCard');
+	            var returncard = document.getElementById('returncard');
+	            returncard.dispatchEvent(numEvent);
 	        }
 
 	        // TODO: Replace this with a loop/map
@@ -20771,92 +20718,244 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { id: 'keypad', className: 'keypad' },
+	                { id: 'returncard', className: 'row' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'col-md-6 col-md-offset-3' },
 	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-8' },
-	                        this.createBtnGrid(),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-4 col-md-offset-4' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleNumClick.bind(this, 0), className: 'btn btn-default btn-lg btn-block' },
-	                                    '0'
-	                                )
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-4' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleCancelClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
-	                                    'Cancel'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleClearClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
-	                                    'Clear'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'row' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-md-12' },
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { type: 'button', onClick: this.handleEnterClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
-	                                    'Enter'
-	                                )
-	                            )
-	                        )
+	                        'button',
+	                        { type: 'button', onClick: this.handleReturnClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
+	                        'Return my card.'
 	                    )
 	                )
 	            );
 	        }
 	    }]);
 
-	    return Keypad;
+	    return Returncard;
 	}(_react.Component);
 
-	exports.default = Keypad;
+	exports.default = Returncard;
 
 /***/ },
-/* 171 */
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _keypad = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../keypad\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _keypad2 = _interopRequireDefault(_keypad);
+
+	__webpack_require__(173);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Pin = function (_Component) {
+	    _inherits(Pin, _Component);
+
+	    function Pin(props) {
+	        _classCallCheck(this, Pin);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Pin).call(this, props));
+
+	        _this.state = {
+	            pin: '',
+	            errorMsg: ''
+	        };
+	        return _this;
+	    }
+
+	    // Functionality:
+	    // x Recieve number events
+	    // x Clear event - remove last number from end of string
+	    // x Cancel - clear string
+	    // x Enter - Failure (Error message)
+	    // x Obfuscate pin
+	    // x Limit pin to 4 nums
+	    // x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
+	    // x Only allow values in multiples of 10
+
+	    _createClass(Pin, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var pin = document.getElementById('pin-component');
+	            pin.addEventListener('numPress', this.numEventHandler.bind(this), true);
+	            pin.addEventListener('clearPress', this.clearFromPin.bind(this), true);
+	            pin.addEventListener('cancelPress', this.cancelEventHandler.bind(this), true);
+	            pin.addEventListener('enterPress', this.enterEventHandler.bind(this), true);
+	            pin.addEventListener('setNumber', this.setNumEventHandler.bind(this), true);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            var pin = document.getElementById('pin-component');
+	            pin.removeEventListener('numPress', this.numEventHandler, true);
+	            pin.addEventListener('clearPress', this.clearFromPin, true);
+	            pin.addEventListener('cancelPress', this.cancelEventHandler, true);
+	            pin.addEventListener('enterPress', this.enterEventHandler, true);
+	            pin.addEventListener('setNumber', this.setNumEventHandler, true);
+	        }
+
+	        // Event Handlers
+
+	        // Add num
+
+	    }, {
+	        key: 'numEventHandler',
+	        value: function numEventHandler(e) {
+	            if (this.state.pin.length < 4) {
+	                this.clearErrorMsg();
+	                var newPin = e.detail.number.toString();
+	                this.setState({ pin: this.state.pin.concat(newPin) });
+	            }
+	        }
+
+	        // Clear
+
+	    }, {
+	        key: 'clearFromPin',
+	        value: function clearFromPin(e) {
+	            this.clearErrorMsg();
+	            this.setState({ pin: this.removeLastElem(this.state.pin) });
+	        }
+	    }, {
+	        key: 'removeLastElem',
+	        value: function removeLastElem(str) {
+	            if (str.length > 0) {
+	                return str.substring(0, str.length - 1);
+	            } else {
+	                return '';
+	            }
+	        }
+
+	        // Cancel
+
+	    }, {
+	        key: 'cancelEventHandler',
+	        value: function cancelEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.setState({ pin: '' });
+	        }
+	    }, {
+	        key: 'enterEventHandler',
+	        value: function enterEventHandler(e) {
+	            this.clearErrorMsg();
+	            this.checkPinAgainstUser();
+	        }
+
+	        // Set Number
+
+	    }, {
+	        key: 'setNumEventHandler',
+	        value: function setNumEventHandler(e) {
+	            this.setState({ cashInput: e.detail.number.toString() });
+	        }
+
+	        // Functions
+
+	    }, {
+	        key: 'clearErrorMsg',
+	        value: function clearErrorMsg() {
+	            this.setState({ errorMsg: '' });
+	        }
+	    }, {
+	        key: 'checkPinAgainstUser',
+	        value: function checkPinAgainstUser() {
+	            // TODO: get Pin from API via promise & run response in then statement
+	            // IRL Pin should be onfuscated via salt/hash/pepper when being sent to the server
+	            try {
+	                if (this.state.pin === '1234') {
+	                    // Send pin correct event
+	                    var pinEvent = new CustomEvent('pinCorrect');
+	                    var pinComponent = document.getElementById('pin-component');
+	                    pinComponent.dispatchEvent(pinEvent);
+	                } else if (this.state.pin.length < 4) {
+	                    var err = new Error('Sorry that pin is not long enough');
+	                    err.name = 'PinTooShort';
+	                    throw err;
+	                } else {
+	                    var _err = new Error('Sorry that pin is incorrect');
+	                    _err.name = 'IncorrectPin';
+	                    throw _err;
+	                }
+	            } catch (e) {
+	                this.setState({ errorMsg: e.message });
+	                console.log('error', e.message);
+	                // Error specific handling
+	                if (e.name === 'IncorrectPin') {} else if (e.name === 'PinTooShort') {} else {}
+	            }
+	        }
+
+	        // Computed Properties
+
+	    }, {
+	        key: 'obfuscatedPin',
+	        value: function obfuscatedPin(pin) {
+	            var obfsPin = '';
+	            for (var i = pin.length - 1; i >= 0; i--) {
+	                obfsPin = obfsPin.concat('x');
+	            }
+	            return obfsPin;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'pin-component' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Please enter your PseudoBank PIN.'
+	                ),
+	                _react2.default.createElement(
+	                    'h1',
+	                    { className: 'pin-display' },
+	                    this.obfuscatedPin(this.state.pin)
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'error-msg' },
+	                    this.state.errorMsg
+	                ),
+	                _react2.default.createElement(_keypad2.default, null)
+	            );
+	        }
+	    }]);
+
+	    return Pin;
+	}(_react.Component);
+
+	exports.default = Pin;
+
+/***/ },
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(172);
+	var content = __webpack_require__(174);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(174)(content, {});
+	var update = __webpack_require__(176)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20873,21 +20972,21 @@
 	}
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(173)();
+	exports = module.exports = __webpack_require__(175)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "html {\n  background-color: #f2f2f2;\n  font-family: Helvetica, Arial, sans-serif;\n}\n#app {\n  background-color: white;\n  margin: 0 auto;\n  padding: 20px;\n  text-align: center;\n}\n", ""]);
+	exports.push([module.id, ".pin-display {\n  min-height: 40px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 173 */
+/* 175 */
 /***/ function(module, exports) {
 
 	/*
@@ -20943,7 +21042,7 @@
 
 
 /***/ },
-/* 174 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21195,284 +21294,6 @@
 
 
 /***/ },
-/* 175 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Returncard = function (_Component) {
-	    _inherits(Returncard, _Component);
-
-	    function Returncard(props) {
-	        _classCallCheck(this, Returncard);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Returncard).call(this, props));
-
-	        _this.state = {};
-	        return _this;
-	    }
-
-	    _createClass(Returncard, [{
-	        key: 'handleReturnClick',
-	        value: function handleReturnClick(e) {
-	            var numEvent = new CustomEvent('returnCard');
-	            var returncard = document.getElementById('returncard');
-	            returncard.dispatchEvent(numEvent);
-	        }
-
-	        // TODO: Replace this with a loop/map
-
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'returncard', className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-md-6 col-md-offset-3' },
-	                    _react2.default.createElement(
-	                        'button',
-	                        { type: 'button', onClick: this.handleReturnClick.bind(this), className: 'btn btn-primary btn-lg btn-block' },
-	                        'Return my card.'
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Returncard;
-	}(_react.Component);
-
-	exports.default = Returncard;
-
-/***/ },
-/* 176 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _keypad = __webpack_require__(170);
-
-	var _keypad2 = _interopRequireDefault(_keypad);
-
-	__webpack_require__(177);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Pin = function (_Component) {
-	    _inherits(Pin, _Component);
-
-	    function Pin(props) {
-	        _classCallCheck(this, Pin);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Pin).call(this, props));
-
-	        _this.state = {
-	            pin: '',
-	            errorMsg: ''
-	        };
-	        return _this;
-	    }
-
-	    // Functionality:
-	    // x Recieve number events
-	    // x Clear event - remove last number from end of string
-	    // x Cancel - clear string
-	    // x Enter - Failure (Error message)
-	    // x Obfuscate pin
-	    // x Limit pin to 4 nums
-	    // x Enter - Success with delay (Server API call if time, else just a timeout & spinner)
-	    // x Only allow values in multiples of 10
-
-	    _createClass(Pin, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var pin = document.getElementById('pin-component');
-	            pin.addEventListener('numPress', this.numEventHandler.bind(this), true);
-	            pin.addEventListener('clearPress', this.clearFromPin.bind(this), true);
-	            pin.addEventListener('cancelPress', this.cancelEventHandler.bind(this), true);
-	            pin.addEventListener('enterPress', this.enterEventHandler.bind(this), true);
-	            pin.addEventListener('setNumber', this.setNumEventHandler.bind(this), true);
-	        }
-	    }, {
-	        key: 'componentWillUnmount',
-	        value: function componentWillUnmount() {
-	            var pin = document.getElementById('pin-component');
-	            pin.removeEventListener('numPress', this.numEventHandler, true);
-	            pin.addEventListener('clearPress', this.clearFromPin, true);
-	            pin.addEventListener('cancelPress', this.cancelEventHandler, true);
-	            pin.addEventListener('enterPress', this.enterEventHandler, true);
-	            pin.addEventListener('setNumber', this.setNumEventHandler, true);
-	        }
-
-	        // Event Handlers
-
-	        // Add num
-
-	    }, {
-	        key: 'numEventHandler',
-	        value: function numEventHandler(e) {
-	            if (this.state.pin.length < 4) {
-	                this.clearErrorMsg();
-	                var newPin = e.detail.number.toString();
-	                this.setState({ pin: this.state.pin.concat(newPin) });
-	            }
-	        }
-
-	        // Clear
-
-	    }, {
-	        key: 'clearFromPin',
-	        value: function clearFromPin(e) {
-	            this.clearErrorMsg();
-	            this.setState({ pin: this.removeLastElem(this.state.pin) });
-	        }
-	    }, {
-	        key: 'removeLastElem',
-	        value: function removeLastElem(str) {
-	            if (str.length > 0) {
-	                return str.substring(0, str.length - 1);
-	            } else {
-	                return '';
-	            }
-	        }
-
-	        // Cancel
-
-	    }, {
-	        key: 'cancelEventHandler',
-	        value: function cancelEventHandler(e) {
-	            this.clearErrorMsg();
-	            this.setState({ pin: '' });
-	        }
-	    }, {
-	        key: 'enterEventHandler',
-	        value: function enterEventHandler(e) {
-	            this.clearErrorMsg();
-	            this.checkPinAgainstUser();
-	        }
-
-	        // Set Number
-
-	    }, {
-	        key: 'setNumEventHandler',
-	        value: function setNumEventHandler(e) {
-	            this.setState({ cashInput: e.detail.number.toString() });
-	        }
-
-	        // Functions
-
-	    }, {
-	        key: 'clearErrorMsg',
-	        value: function clearErrorMsg() {
-	            this.setState({ errorMsg: '' });
-	        }
-	    }, {
-	        key: 'checkPinAgainstUser',
-	        value: function checkPinAgainstUser() {
-	            // TODO: get Pin from API via promise & run response in then statement
-	            // IRL Pin should be onfuscated via salt/hash/pepper when being sent to the server
-	            try {
-	                if (this.state.pin === '1234') {
-	                    // Send pin correct event
-	                    var pinEvent = new CustomEvent('pinCorrect');
-	                    var pinComponent = document.getElementById('pin-component');
-	                    pinComponent.dispatchEvent(pinEvent);
-	                } else if (this.state.pin.length < 4) {
-	                    var err = new Error('Sorry that pin is not long enough');
-	                    err.name = 'PinTooShort';
-	                    throw err;
-	                } else {
-	                    var _err = new Error('Sorry that pin is incorrect');
-	                    _err.name = 'IncorrectPin';
-	                    throw _err;
-	                }
-	            } catch (e) {
-	                this.setState({ errorMsg: e.message });
-	                console.log('error', e.message);
-	                // Error specific handling
-	                if (e.name === 'IncorrectPin') {} else if (e.name === 'PinTooShort') {} else {}
-	            }
-	        }
-
-	        // Computed Properties
-
-	    }, {
-	        key: 'obfuscatedPin',
-	        value: function obfuscatedPin(pin) {
-	            var obfsPin = '';
-	            for (var i = pin.length - 1; i >= 0; i--) {
-	                obfsPin = obfsPin.concat('x');
-	            }
-	            return obfsPin;
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'pin-component' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    'Please enter your PseudoBank PIN.'
-	                ),
-	                _react2.default.createElement(
-	                    'h1',
-	                    { className: 'pin-display' },
-	                    this.obfuscatedPin(this.state.pin)
-	                ),
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'error-msg' },
-	                    this.state.errorMsg
-	                ),
-	                _react2.default.createElement(_keypad2.default, null)
-	            );
-	        }
-	    }]);
-
-	    return Pin;
-	}(_react.Component);
-
-	exports.default = Pin;
-
-/***/ },
 /* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21482,7 +21303,7 @@
 	var content = __webpack_require__(178);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(174)(content, {});
+	var update = __webpack_require__(176)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -21502,47 +21323,7 @@
 /* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(173)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".pin-display {\n  min-height: 40px;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 179 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(180);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(174)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(173)();
+	exports = module.exports = __webpack_require__(175)();
 	// imports
 
 
