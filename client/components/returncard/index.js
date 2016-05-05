@@ -15,7 +15,6 @@ class Returncard extends Component {
         returncard.dispatchEvent(numEvent);
     }
     
-    // TODO: Replace this with a loop/map
     render() {
         return ( 
             <div id='returncard' className='row'>

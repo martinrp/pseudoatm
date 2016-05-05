@@ -58,8 +58,6 @@ class Keypad extends Component {
         return rows;
     }
     
-    
-    // TODO: Replace this with a loop/map
     render() {
         return ( 
             <div id='keypad' className='keypad'>
