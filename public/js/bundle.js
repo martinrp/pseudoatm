@@ -20294,7 +20294,7 @@
 	        key: 'removeLastElem',
 	        value: function removeLastElem(str) {
 	            if (str.length > 0) {
-	                return str.substring(0, leng - 1);
+	                return str.substring(0, str.length - 1);
 	            }
 	        }
 

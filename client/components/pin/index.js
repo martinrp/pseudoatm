@@ -76,14 +76,12 @@ class Pin extends Component {
 
     clearFromCash(e){
         this.clearErrorMsg();
-        newStr = this.removeLastElem(this.state.cashInput);
-        this.setState({ cashInput: newVal });
+        this.setState({ cashInput: this.removeLastElem(this.state.cashInput) });
     }
 
     clearFromPin(e){
         this.clearErrorMsg();
-        newStr = this.removeLastElem(this.state.pin);
-        this.setState({ pin: newVal });
+        this.setState({ pin: this.removeLastElem(this.state.pin) });
     }
 
     removeLastElem(str){
